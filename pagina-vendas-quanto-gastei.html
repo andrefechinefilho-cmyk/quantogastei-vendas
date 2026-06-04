@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quanto gastei? — Organize suas finanças em minutos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-light: #5DCAA5;
+    --green-dark: #0F6E56;
+    --black: #0A0A0A;
+    --off-black: #111318;
+    --card: #161A22;
+    --border: rgba(255,255,255,0.07);
+    --text: #E8EAF0;
+    --text2: #8A90A0;
+    --text3: #4A5060;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* WATERMARK BG */
+  .bg-watermark {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .bg-watermark span {
+    position: absolute;
+    font-family: 'DM Sans', sans-serif;
+    color: rgba(255,255,255,0.035);
+    font-weight: 700;
+    user-select: none;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo { font-family: 'DM Sans', sans-serif; font-size: 20px; }
+  .nav-logo span:first-child { font-weight: 300; color: var(--text); }
+  .nav-logo span:last-child { font-weight: 800; font-style: italic; color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+  .nav-cta {
+    background: var(--green); color: #fff; border: none;
+    padding: 11px 24px; border-radius: 99px; font-size: 14px;
+    font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    text-decoration: none; transition: background .2s;
+  }
+  .nav-cta:hover { background: var(--green-dark); }
+
+  /* HERO */
+  .hero {
+    min-height: 90vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 80px 24px 60px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(29,158,117,0.12); border: 0.5px solid rgba(29,158,117,0.3);
+    color: var(--green-light); font-size: 12px; font-weight: 500;
+    padding: 6px 16px; border-radius: 99px; margin-bottom: 36px;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .hero-tag::before { content: '●'; font-size: 8px; }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 86px);
+    font-weight: 700; line-height: 1.05;
+    max-width: 800px;
+    margin-bottom: 12px;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--green);
+  }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text2); max-width: 520px;
+    line-height: 1.65; margin-bottom: 48px; font-weight: 300;
+  }
+  .hero-price {
+    display: flex; align-items: baseline; gap: 10px;
+    justify-content: center; margin-bottom: 24px;
+  }
+  .hero-price-from {
+    font-size: 13px; color: var(--text3);
+    text-decoration: line-through;
+  }
+  .hero-price-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 700; color: var(--green);
+    line-height: 1;
+  }
+  .hero-price-period { font-size: 14px; color: var(--text2); }
+  .btn-hero {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green); color: #fff; border: none;
+    padding: 18px 44px; border-radius: 99px;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; text-decoration: none;
+    transition: all .2s; letter-spacing: .01em;
+    box-shadow: 0 0 40px rgba(29,158,117,0.25);
+  }
+  .btn-hero:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 4px 48px rgba(29,158,117,0.35); }
+  .btn-hero::after { content: '→'; }
+  .hero-trust {
+    margin-top: 20px; font-size: 12px; color: var(--text3);
+    display: flex; align-items: center; gap: 6px; justify-content: center;
+  }
+  .hero-trust::before { content: '🔒'; font-size: 11px; }
+
+  /* MOCKUP */
+  .mockup-section {
+    padding: 0 24px 100px;
+    display: flex; justify-content: center;
+  }
+  .mockup-wrap {
+    max-width: 780px; width: 100%;
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  }
+  .mockup-bar {
+    background: #0D1017; padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mockup-url {
+    flex: 1; margin: 0 12px;
+    background: rgba(255,255,255,0.05); border-radius: 6px;
+    padding: 5px 12px; font-size: 11px; color: var(--text3);
+    text-align: center;
+  }
+  .mockup-screen { padding: 24px; }
+  .mock-kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
+  .mock-kpi { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 14px; }
+  .mock-kpi-lbl { font-size: 10px; color: var(--text3); margin-bottom: 6px; }
+  .mock-kpi-val { font-size: 20px; font-weight: 700; }
+  .mock-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; }
+  .mock-card { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 14px; }
+  .mock-card-title { font-size: 11px; color: var(--text3); margin-bottom: 10px; }
+  .mock-bar { display: flex; flex-direction: column; gap: 7px; }
+  .mock-bar-item { display: flex; flex-direction: column; gap: 3px; }
+  .mock-bar-lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); }
+  .mock-bar-track { height: 5px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
+  .mock-bar-fill { height: 100%; border-radius: 99px; }
+
+  /* FEATURES */
+  .features { padding: 100px 60px; }
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px); font-weight: 700;
+    line-height: 1.15; max-width: 560px; margin-bottom: 60px;
+  }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 0.5px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .feature-item {
+    background: var(--off-black); padding: 36px 32px;
+    transition: background .2s;
+  }
+  .feature-item:hover { background: var(--card); }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(29,158,117,0.12); border: 0.5px solid rgba(29,158,117,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 18px;
+  }
+  .feature-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .feature-desc { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+  /* HOW IT WORKS */
+  .how { padding: 100px 60px; background: var(--off-black); }
+  .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 40px; margin-top: 60px; }
+  .step { position: relative; }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px; font-weight: 700; color: rgba(29,158,117,0.15);
+    line-height: 1; margin-bottom: 16px;
+  }
+  .step-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .step-desc { font-size: 14px; color: var(--text2); line-height: 1.65; }
+  .step-connector {
+    position: absolute; top: 36px; right: -20px;
+    color: var(--text3); font-size: 20px;
+  }
+
+  /* SOCIAL PROOF */
+  .proof { padding: 100px 60px; }
+  .proof-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+  .proof-card {
+    background: var(--card); border: 0.5px solid var(--border);
+    border-radius: 14px; padding: 28px;
+  }
+  .proof-stars { color: #FFD600; font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+  .proof-text { font-size: 14px; color: var(--text2); line-height: 1.65; margin-bottom: 18px; font-style: italic; }
+  .proof-author { font-size: 13px; font-weight: 600; color: var(--text); }
+  .proof-role { font-size: 12px; color: var(--text3); }
+
+  /* CTA FINAL */
+  .cta-final {
+    padding: 120px 24px;
+    text-align: center;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(29,158,117,0.08) 0%, transparent 70%);
+  }
+  .cta-final h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px); font-weight: 700;
+    line-height: 1.1; max-width: 700px; margin: 0 auto 24px;
+  }
+  .cta-final h2 em { font-style: italic; color: var(--green); }
+  .cta-final p { font-size: 17px; color: var(--text2); margin-bottom: 48px; font-weight: 300; }
+  .cta-price-block { margin-bottom: 32px; }
+  .cta-old { font-size: 14px; color: var(--text3); text-decoration: line-through; margin-bottom: 4px; }
+  .cta-new {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 700; color: var(--green); line-height: 1;
+  }
+  .cta-once { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .cta-guarantee {
+    margin-top: 20px; font-size: 13px; color: var(--text3);
+    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+  }
+  .cta-guarantee span::before { margin-right: 6px; }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 60px; border-top: 0.5px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: var(--text3);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .features, .how, .proof { padding: 70px 20px; }
+    .features-grid, .steps, .proof-grid { grid-template-columns: 1fr; }
+    .mock-row { grid-template-columns: 1fr; }
+    .mock-kpis { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+    .step-connector { display: none; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero > * { animation: fadeUp .6s ease both; }
+  .hero > *:nth-child(1) { animation-delay: .1s; }
+  .hero > *:nth-child(2) { animation-delay: .2s; }
+  .hero > *:nth-child(3) { animation-delay: .3s; }
+  .hero > *:nth-child(4) { animation-delay: .4s; }
+  .hero > *:nth-child(5) { animation-delay: .5s; }
+  .hero > *:nth-child(6) { animation-delay: .55s; }
+  .hero > *:nth-child(7) { animation-delay: .6s; }
+</style>
+</head>
+<body>
+
+<!-- WATERMARK -->
+<div class="bg-watermark" id="wm"></div>
+
+<div class="content">
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo"><span>Quanto</span><span>gastei?</span></div>
+    <a href="#comprar" class="nav-cta">Quero organizar agora</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">Produto digital · Acesso imediato</div>
+    <h1>Organize suas finanças<br><em>em minutos.</em></h1>
+    <p class="hero-sub">O app que te mostra exatamente para onde vai o seu dinheiro — sem planilha complicada, sem app pesado, sem mensalidade.</p>
+    <div class="hero-price">
+      <span class="hero-price-from">R$ 47,00</span>
+      <span class="hero-price-val">R$ 19,90</span>
+      <span class="hero-price-period">pagamento único</span>
+    </div>
+    <a href="#comprar" class="btn-hero">Acessar agora por R$ 19,90</a>
+    <p class="hero-trust">Pagamento seguro via Hotmart · Acesso imediato</p>
+  </section>
+
+  <!-- MOCKUP -->
+  <div class="mockup-section">
+    <div class="mockup-wrap">
+      <div class="mockup-bar">
+        <div class="mockup-dot" style="background:#FF5F57"></div>
+        <div class="mockup-dot" style="background:#FFBD2E"></div>
+        <div class="mockup-dot" style="background:#28CA41"></div>
+        <div class="mockup-url">quantogastei.netlify.app</div>
+      </div>
+      <div class="mockup-screen">
+        <div class="mock-kpis">
+          <div class="mock-kpi"><div class="mock-kpi-lbl">Entradas</div><div class="mock-kpi-val" style="color:#1D9E75">R$ 4.200</div></div>
+          <div class="mock-kpi"><div class="mock-kpi-lbl">Gastos</div><div class="mock-kpi-val" style="color:#D85A30">R$ 2.850</div></div>
+          <div class="mock-kpi"><div class="mock-kpi-lbl">Saldo</div><div class="mock-kpi-val" style="color:#378ADD">R$ 1.350</div></div>
+        </div>
+        <div class="mock-row">
+          <div class="mock-card">
+            <div class="mock-card-title">Gastos por categoria</div>
+            <div class="mock-bar">
+              <div class="mock-bar-item"><div class="mock-bar-lbl"><span>Casa</span><span>R$ 1.200</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:72%;background:#D85A30"></div></div></div>
+              <div class="mock-bar-item"><div class="mock-bar-lbl"><span>Alimentação</span><span>R$ 620</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:48%;background:#EF9F27"></div></div></div>
+              <div class="mock-bar-item"><div class="mock-bar-lbl"><span>Transporte</span><span>R$ 380</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:30%;background:#378ADD"></div></div></div>
+              <div class="mock-bar-item"><div class="mock-bar-lbl"><span>Saúde</span><span>R$ 290</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:22%;background:#7F77DD"></div></div></div>
+            </div>
+          </div>
+          <div class="mock-card">
+            <div class="mock-card-title">Metas do mês</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#8A90A0;margin-bottom:4px"><span>Reserva</span><span>34%</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:34%;background:#1D9E75"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#8A90A0;margin-bottom:4px"><span>Viagem</span><span>61%</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:61%;background:#378ADD"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#8A90A0;margin-bottom:4px"><span>Educação</span><span>80%</span></div><div class="mock-bar-track"><div class="mock-bar-fill" style="width:80%;background:#7F77DD"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-label">O que você leva</div>
+    <h2 class="section-title">Tudo que você precisa para ter controle de verdade</h2>
+    <div class="features-grid">
+      <div class="feature-item"><div class="feature-icon">📊</div><div class="feature-title">Dashboard em tempo real</div><div class="feature-desc">Veja entradas, gastos e saldo do mês num único painel atualizado automaticamente.</div></div>
+      <div class="feature-item"><div class="feature-icon">💳</div><div class="feature-title">Controle de parcelas</div><div class="feature-desc">Registre suas dívidas e parcelas e acompanhe quantas já foram pagas.</div></div>
+      <div class="feature-item"><div class="feature-icon">🎯</div><div class="feature-title">Metas financeiras</div><div class="feature-desc">Defina objetivos como viagem ou reserva de emergência e veja seu progresso crescer.</div></div>
+      <div class="feature-item"><div class="feature-icon">🏠</div><div class="feature-title">Gastos fixos</div><div class="feature-desc">Cadastre aluguel, internet, plano de saúde e saiba exatamente quanto sai todo mês.</div></div>
+      <div class="feature-item"><div class="feature-icon">📅</div><div class="feature-title">Resumo anual</div><div class="feature-desc">Acompanhe sua evolução financeira ao longo do ano inteiro, mês a mês.</div></div>
+      <div class="feature-item"><div class="feature-icon">📱</div><div class="feature-title">Funciona em qualquer tela</div><div class="feature-desc">Celular, tablet ou computador — acesse de onde quiser, sem instalar nada.</div></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="section-label">Como funciona</div>
+    <h2 class="section-title">3 passos para organizar sua vida financeira</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Compre e acesse</div>
+        <div class="step-desc">Após o pagamento você recebe o link do app na hora. Sem espera, sem instalação.</div>
+        <div class="step-connector">→</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Registre seus dados</div>
+        <div class="step-desc">Lance suas entradas, gastos fixos, parcelas e metas. É simples e intuitivo.</div>
+        <div class="step-connector">→</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Tenha controle total</div>
+        <div class="step-desc">O dashboard mostra tudo automaticamente. Você finalmente sabe para onde vai seu dinheiro.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="proof">
+    <div class="section-label">Depoimentos</div>
+    <h2 class="section-title">Quem usa, não larga</h2>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-text">"Em uma semana já percebi que gastava R$ 400 por mês em coisas que nem lembrava. Agora tenho controle total."</p>
+        <div class="proof-author">Mariana S.</div>
+        <div class="proof-role">Designer, SP</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-text">"Finalmente um app de finanças que não é complicado. Uso no celular mesmo, na hora que lembro de registrar."</p>
+        <div class="proof-author">Rafael M.</div>
+        <div class="proof-role">Autônomo, RJ</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-text">"Em 3 meses consegui guardar o suficiente para a minha viagem. As metas me motivam demais!"</p>
+        <div class="proof-author">Camila T.</div>
+        <div class="proof-role">CLT, MG</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final" id="comprar">
+    <h2>Chega de não saber para onde<br><em>vai o seu dinheiro.</em></h2>
+    <p>Acesso imediato. Pagamento único. Sem mensalidade.</p>
+    <div class="cta-price-block">
+      <div class="cta-old">De R$ 47,00</div>
+      <div class="cta-new">R$ 19,90</div>
+      <div class="cta-once">pagamento único · acesso para sempre</div>
+    </div>
+    <a href="SEU_LINK_HOTMART_AQUI" class="btn-hero" style="font-size:17px;padding:20px 52px">Quero organizar minha vida financeira</a>
+    <div class="cta-guarantee">
+      <span>✓ Acesso imediato após pagamento</span>
+      <span>✓ Funciona no celular e computador</span>
+      <span>✓ Sem mensalidade</span>
+    </div>
+  </section>
+
+  <footer>
+    <div class="nav-logo"><span>Quanto</span><span>gastei?</span></div>
+    <span>© 2025 · Todos os direitos reservados</span>
+  </footer>
+</div>
+
+<script>
+const symbols = ['$','R$','¢','%','€','£'];
+const wm = document.getElementById('wm');
+for(let i=0;i<55;i++){
+  const s = document.createElement('span');
+  s.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  s.style.cssText = `
+    top:${Math.random()*100}%;
+    left:${Math.random()*100}%;
+    font-size:${14+Math.random()*44}px;
+    transform:rotate(${-30+Math.random()*60}deg);
+    opacity:${0.03+Math.random()*0.04};
+  `;
+  wm.appendChild(s);
+}
+</script>
+</body>
+</html>
